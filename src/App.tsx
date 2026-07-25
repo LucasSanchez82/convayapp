@@ -57,6 +57,7 @@ function App() {
     setIsGeneratingPdf(true);
     setPdfError(null);
     try {
+
       const destination = await save({
         defaultPath: "recapitulatif-enfants.pdf",
         filters: [{ name: "PDF", extensions: ["pdf"] }],
