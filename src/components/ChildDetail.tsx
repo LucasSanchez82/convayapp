@@ -25,17 +25,22 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
 
   const listFields = Object.keys(LIST_FIELD_LABELS) as ListField[];
 
+  const labelCellClass =
+    "px-4 py-2 sm:px-6 sm:py-4 sm:border-r border-default block sm:table-cell font-semibold sm:font-normal text-sm sm:text-3xl";
+  const valueCellClass = "px-4 pb-3 pt-0 sm:px-6 sm:py-2 block sm:table-cell text-base sm:text-3xl";
+  const rowClass = "bg-neutral-primary border-b border-default block sm:table-row";
+
   return (
-    <table className="container border text-3xl border-collapse text-left rtl:text-right text-body m-auto mt-8">
-      <tr className="bg-neutral-primary border-b border-default">
-        <td className="px-6 py-4 border-r border-default">Statut de traitement</td>
-        <td className="px-6 py-2">
+    <table className="container border border-collapse text-left rtl:text-right text-body m-auto mt-8 block sm:table w-full sm:w-auto">
+      <tr className={rowClass}>
+        <td className={labelCellClass}>Statut de traitement</td>
+        <td className={valueCellClass}>
           <div className="flex items-center gap-2 flex-wrap">
             {STATUS_OPTIONS.map(status => (
               <button
                 key={status}
                 onClick={() => onUpdate({ processingStatus: status })}
-                className={`text-base border p-1.5 hover:cursor-pointer ${STATUS_BUTTON_CLASS[status]} ${
+                className={`text-sm sm:text-base border p-1.5 hover:cursor-pointer ${STATUS_BUTTON_CLASS[status]} ${
                   child.processingStatus === status ? "ring-2 ring-inset ring-black" : ""
                 }`}
               >
@@ -45,9 +50,9 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
           </div>
         </td>
       </tr>
-      <tr className="bg-neutral-primary border-b border-default">
-        <td className="px-6 py-4 border-r border-default">Téléphone</td>
-        <td className="px-6">
+      <tr className={rowClass}>
+        <td className={labelCellClass}>Téléphone</td>
+        <td className={valueCellClass}>
           <input
             type="checkbox"
             className="w-6 h-6 hover:cursor-pointer"
@@ -56,9 +61,9 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
           />
         </td>
       </tr>
-      <tr className="bg-neutral-primary border-b border-default">
-        <td className="px-6 py-4 border-r border-default">Numéro de téléphone</td>
-        <td className="px-6 py-2">
+      <tr className={rowClass}>
+        <td className={labelCellClass}>Numéro de téléphone</td>
+        <td className={valueCellClass}>
           <div className="flex items-center gap-3 flex-wrap">
             <input
               className={invisibleInputClass}
@@ -66,7 +71,7 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
               value={child.phoneNumber}
               onChange={e => onUpdate({ phoneNumber: e.target.value })}
             />
-            <span className="text-base text-gray-500">Correction si erroné :</span>
+            <span className="text-sm sm:text-base text-gray-500">Correction si erroné :</span>
             <input
               className={`${invisibleInputClass} ${hasPhoneDiscrepancy ? "ring-1 ring-red-400" : ""}`}
               placeholder="Numéro corrigé"
@@ -74,15 +79,15 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
               onChange={e => onUpdate({ phoneNumberCorrected: e.target.value })}
             />
             {hasPhoneDiscrepancy && (
-              <span className="text-red-600 text-base">⚠ différent du numéro saisi</span>
+              <span className="text-red-600 text-sm sm:text-base">⚠ différent du numéro saisi</span>
             )}
           </div>
         </td>
       </tr>
       {listFields.map(field => (
-        <tr key={field} className="bg-neutral-primary border-b border-default">
-          <td className="px-6 py-4 border-r border-default">{LIST_FIELD_LABELS[field]}</td>
-          <td className="px-6 py-2">
+        <tr key={field} className={rowClass}>
+          <td className={labelCellClass}>{LIST_FIELD_LABELS[field]}</td>
+          <td className={valueCellClass}>
             <LabelMultiSelect
               options={optionsByField[field]}
               selected={child[field]}
@@ -92,9 +97,9 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
           </td>
         </tr>
       ))}
-      <tr className="bg-neutral-primary border-b border-default">
-        <td className="px-6 py-4 border-r border-default">Argent de poche</td>
-        <td className="px-6 py-2">
+      <tr className={rowClass}>
+        <td className={labelCellClass}>Argent de poche</td>
+        <td className={valueCellClass}>
           <div className="flex items-center gap-2">
             <input
               type="number"
@@ -104,13 +109,13 @@ function ChildDetail({ child, optionsByField, onUpdate, onCreateOption }: ChildD
               value={child.pocketMoney}
               onChange={e => onUpdate({ pocketMoney: parseFloat(e.target.value) || 0 })}
             />
-            <span className="text-base text-gray-500">€</span>
+            <span className="text-sm sm:text-base text-gray-500">€</span>
           </div>
         </td>
       </tr>
-      <tr className="bg-neutral-primary border-b border-default">
-        <td className="px-6 py-4 border-r border-default">Notes</td>
-        <td className="px-6">
+      <tr className={rowClass}>
+        <td className={labelCellClass}>Notes</td>
+        <td className={valueCellClass}>
           <input
             className={`${invisibleInputClass} w-full`}
             value={child.notes}

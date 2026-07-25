@@ -74,7 +74,7 @@ function LabelMultiSelect({ options, selected, onChange, onCreateOption }: Label
         />
       </div>
       {open && (availableOptions.length > 0 || isNewValue) && (
-        <ul className="absolute z-10 mt-1 max-h-48 w-56 overflow-auto rounded border border-default bg-white text-lg shadow">
+        <ul className="absolute z-10 mt-1 max-h-48 w-56 max-w-[90vw] overflow-auto rounded border border-default bg-white text-lg shadow">
           {availableOptions.map(option => (
             <li key={option}>
               <button
