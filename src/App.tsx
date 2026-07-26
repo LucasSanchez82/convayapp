@@ -10,6 +10,7 @@ import OcrImport from "./components/OcrImport";
 import OcrImportReview from "./components/OcrImportReview";
 import { useChildren } from "./hooks/useChildren";
 import { Child, DEFAULT_OPTIONS, LIST_FIELD_LABELS, ListField } from "./types";
+import { buildRecapText } from "./recapText";
 import type { OcrRow } from "./ocr/parseChildrenList";
 
 function App() {
@@ -52,6 +53,8 @@ function App() {
 
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [showRecapText, setShowRecapText] = useState(false);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
 
   const generateRecapPdf = async () => {
     setIsGeneratingPdf(true);
@@ -71,6 +74,20 @@ function App() {
       setPdfError(String(err));
     } finally {
       setIsGeneratingPdf(false);
+    }
+  };
+
+  const recapText = buildRecapText(roster);
+
+  const copyRecapText = async () => {
+    try {
+      await navigator.clipboard.writeText(recapText);
+      setCopyState("copied");
+    } catch (err) {
+      setPdfError(String(err));
+      setCopyState("error");
+    } finally {
+      setTimeout(() => setCopyState("idle"), 1500);
     }
   };
 
@@ -114,6 +131,12 @@ function App() {
             {isGeneratingPdf ? "Génération…" : "Générer le PDF récapitulatif"}
           </button>
           <button
+            onClick={() => setShowRecapText(s => !s)}
+            className="bg-gray-300 border p-2 text-sm sm:text-base hover:cursor-pointer"
+          >
+            {showRecapText ? "Masquer le texte du récapitulatif" : "Afficher le texte du récapitulatif"}
+          </button>
+          <button
             onClick={() => setShowSettings(s => !s)}
             className="bg-gray-300 border p-2 text-sm sm:text-base hover:cursor-pointer"
           >
@@ -121,6 +144,20 @@ function App() {
           </button>
         </div>
       </div>
+      {showRecapText && (
+        <div className="container m-auto mt-4 border border-default p-3 sm:p-4 bg-neutral-primary">
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <h2 className="text-lg sm:text-2xl">Texte du récapitulatif</h2>
+            <button
+              onClick={copyRecapText}
+              className="bg-gray-300 border p-2 text-sm sm:text-base hover:cursor-pointer"
+            >
+              {copyState === "copied" ? "Copié !" : copyState === "error" ? "Échec de la copie" : "Copier le texte"}
+            </button>
+          </div>
+          <p className="whitespace-pre-wrap text-sm sm:text-base">{recapText}</p>
+        </div>
+      )}
       {showSettings && (
         <div className="container m-auto mt-4 border border-default p-3 sm:p-4 bg-neutral-primary">
           <h2 className="text-lg sm:text-2xl mb-4">Listes de suggestions — retirer un élément ajouté par erreur</h2>
